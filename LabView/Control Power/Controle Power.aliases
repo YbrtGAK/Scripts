@@ -1,0 +1,6 @@
+[Poste de travail]
+Poste de travail = "192.168.157.1"
+
+[RT CompactRIO Target]
+RT CompactRIO Target = "192.168.40.31"
+
