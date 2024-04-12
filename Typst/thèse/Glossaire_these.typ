@@ -32,13 +32,14 @@ align(center)[CHF], [Critical Heat flux [-]],[Heat flux at which boiling ceases 
 
 align(center)[$F_o$],[Froude number [-]],[Ratio of the flow inertia to the external field (the latter in many applications simply due to gravity)],[$ F_0=u/(sqrt(g.L)) $],
 
-align(center)[$f$],[Fanning friction factor [-]],[Ratio of the local shear stress with the local flow kinetic energy density],[$ f= tau/(rho*(u^2)/2) $],
+align(center)[$f$],[Fanning friction factor [-]],[Ratio of the local shear stress with the local flow kinetic energy density],[$ f= tau/(rho. (u^2)/2) $],
 
 align(center)[HTC], [Heat Transfert Coefficient [-]],[Proportionality constant between the heat flux and temperature difference],[$ "HTC"=q/(Delta T) $],
 
-align(center)[ONB], [Onset of Nucleate Boilling [-]],[Onset activation for the first nucleation sites],align(center)[N/A],
+align(center)[ONB], [Onset of Nucleate Boilling [-]],[Onset activation for the first nucleation sites. "the point of net vapor generation"#footnote[Kandlikar, S. G. « Heat Transfer Characteristics in Partial Boiling, Fully Developed Boiling, and Significant Void Flow Regions of Subcooled Flow Boiling ». Journal of Heat Transfer 120, nᵒ 2 (1 mai 1998): 395‑401. https://doi.org/10.1115/1.2824263.
+]],align(center)[N/A],
 
-align(center)[OSV], [Onset of Significant Void [-]],[Incipient of increased vapor convection : bubbles begin moving toward the core],align(center)[N/A],
+align(center)[OSV], [Onset of Significant Void [-]],[Incipient of increased vapor convection : bubbles begin moving toward the core : $Q_"vapor"=0^+$],align(center)[N/A],
 
 align(center)[s],[Symmetry [-]],[Mesure of the none-uniformity of the liquid's level around the canal's perimeter [-]],[$ s=d_"top"/r = 1 - (t_"bottom" - t_"top")/d $],
 
