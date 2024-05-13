@@ -33,3 +33,6 @@ Cache_Path[Path] Line0002 = "AC-B372-464B-9FB6-0908EE039C72}.txt"
 Cache_Path[Path] Line0001 = "/C/Users/dmarc/AppData/Local/Temp/AB_Cache_{37C2E0"
 Cache_Path[Path] Line0002 = "86-653A-4C46-AF1D-01DD311B733B}.txt"
 
+[ProjectWindow_Data]
+ProjectExplorer.ClassicPosition[String] = "25,2,678,1278"
+

@@ -19,6 +19,7 @@
 		<Property Name="server.vi.callsEnabled" Type="Bool">true</Property>
 		<Property Name="server.vi.propertiesEnabled" Type="Bool">true</Property>
 		<Property Name="specify.custom.address" Type="Bool">false</Property>
+		<Item Name="Control 1.ctl" Type="VI" URL="../Control Power/Control 1.ctl"/>
 		<Item Name="Dépendances" Type="Dependencies"/>
 		<Item Name="Spécifications de construction" Type="Build"/>
 	</Item>
