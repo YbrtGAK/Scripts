@@ -65,13 +65,13 @@ Il vient ainsi l'expression de la dérivée particulaire d'une grandeur physique
 
 #math.equation(numbering: "(1)",
 supplement : "l'équation",
-block : true,$ "dG"/d t = "DG"/d t = (diff G)/(diff t) + (vec(nabla)G).vec(v) $) <equation_derivee_particulaire>
+block : true,$ "dG"/dt = "DG"/dt = (diff G)/(diff t) + (vec(nabla)G).vec(v) $) <equation_derivee_particulaire>
 La description eulérienne s'intéresse à l'évolution des grandeurs physiques du fluide pour chaque point de l'espace en fonction du temps. L'accélération du fluide en fait partie. En évaluant l'équation (1) avec la vitesse du fluide, il vient : 
 
 #math.equation(numbering:"(1)",
 supplement : "l'équation",
 block : true,
-$vec(a) = (D vec(v))/d t = (diff vec(v))/(diff t) + (vec(nabla)vec(v)).vec(v)$) <eq_der_particulaire>
+$vec(a) = (D vec(v))/dt = (diff vec(v))/(diff t) + (vec(nabla)vec(v)).vec(v)$) <eq_der_particulaire>
 
 == Théorème fondamental de Cauchy : Tenseur de contraintes
 #outlinebox(
@@ -128,7 +128,8 @@ Il vient l'expression du débit masse $Q_m$ :
 
 $ Q_m eq.est dm/dt = integral.cont_(M in S)(rho(vec(x),t).vec(v).vec(n)).dS $ <eq_debit_masse>
 
-En définissant le vecteur densité de flux de masse $vec(J)(vec(x),t)=rho(vec(x),t).vec(v)(vec(x),t)$, l'expression du débit masse devient : $Q_m=integral.cont_(M in S)(vec(J)(vec(x),t).vec(n)).dS$
+En définissant le vecteur densité de flux de masse $vec(J)(vec(x),t)=rho(vec(x),t).vec(v)(vec(x),t)$, l'expression du débit masse devient : 
+$ Q_m=integral.cont_(M in S)(vec(J)(vec(x),t).vec(n)).dS $
 
 === Equation de continuité
 
@@ -176,9 +177,8 @@ L'évolution de la quantité de mouvement du volume de contrôle V est donnée p
 
 $ 
 underbrace(derpt("","t") integral_(M in V) (rho .vec(v))."dV", "Variation de la QdM" \ "dans V") + 
-underbrace(integral.cont_(M in S) (rho .vec(v) . vec(v) .vec(n)).dS, "Flux de QdM "\ "au travers S") = 
-underbrace(integral_(M in V) vec(F_V)."dV", "QdM générée/absorbée" \ "par les forces volumiques") +
-underbrace(integral_(M in S) vec(F_S).dS, "QdM générée/absorbée" \ "par les forces surfaciques")
+underbrace(integral.cont_(M in S) (rho .vec(v) . vec(v)).vec(n).dS, "Flux de QdM "\ "au travers S") = 
+underbrace(integral_(M in V) vec(F_V)."dV", "QdM générée/absorbée" \ "par les forces volumiques") + underbrace(integral_(M in S) vec(F_S).dS, "QdM générée/absorbée" \ "par les forces surfaciques")
 $ <eq_bilan_qdm>
 
 On se place dans le cas où la force gravitationnelle est la seule force à distance.
@@ -253,7 +253,7 @@ Il représente la contrainte normale moyenne du fluide.
 $ tensor(sigma) = -P(vec(x),t).I + tensor(sigma_D) $
 Où $"trace"(tensor(sigma_D)) = 0$ et $I$ la matrice identité.
 \
-En remplaçant la nouvelle expression du tenseur de Cauchy dans l'@eq_1ere_loi_mvt_cauchy on obtient : 
+En remplaçant la nouvelle expression du tenseur de Cauchy dans @eq_1ere_loi_mvt_cauchy on obtient : 
 
 $
 
@@ -290,7 +290,7 @@ block : true)[$
 & rho. Der("")(1/2. abs(abs(vec(v)))^2) = -vec(v). nabla P + vec(v). (rho. vec(g)) + vec(v).nablav tensor(sigma_D)
 $] <eq_cons_Emeca>
 
-Cette expression peut être inclue dans l'expression générale de l'énergie massique totale e d'une particule où : 
+Cette expression peut être inclue dans l'expression générale de *l'énergie massique totale e* d'une particule où : 
 $ e #eq_df e_"méca" + u = e_"cinétique" + e_"potentielle" + u $
 Avec u l'énergie interne de la particule. 
 
@@ -315,12 +315,12 @@ underbrace(
 = 
 underbrace(
   integral_A (dot(q).vec(n)). d A,
-  "Flux de chaleur au travers A"
+  "Flux de chaleur " \ "au travers A"
 ) 
 +
 underbrace(
    integral_A vec(n). (tau. vec(n)). d A,
-  "Variation d'énergie" \ "due aux forces surfaciques"
+  "Variation d'énergie due " \ "aux forces surfaciques"
 ) 
 
 $])
