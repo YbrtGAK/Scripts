@@ -1,0 +1,94 @@
+<html>
+
+<head>
+<title>Keithley 27XX Instrument Driver Readme</title>
+</head>
+
+<body>
+<pre>
+<font face = "Times New Roman", size = 3>
+<h2>Keithley 27XX Instrument Driver Readme</h2>
+To rate this driver, go to the Keithley 27XX driver download page on the <a href = http://www.ni.com/idnet>Instrument Driver Network</a>.
+
+<h4>1. Overview</h4>
+Instrument Driver Technology:  Plug and Play (project-style)
+Supported Language(s):  LabVIEW
+
+Supported Model(s):  2700, 2701, 2750, 7700, 7701, 7702, 7703, 7705, 7706, 7707, 7708, 7709, 7710, 7711, 7712
+Model(s) Tested:  Model 2700, 2701, 2750
+Interface(s):  GPIB, Serial, Ethernet (where applicable)
+Firmware Revisions Tested:  B05, A05, A07 
+
+Certified:  Yes
+NI Supported:  Yes
+Source Code Available:  Yes
+
+Driver Revision:  2.3
+Original Release Date:  06/2004
+Current Revision Date:  04/2008
+
+<h4>2. Required Software</h4>
+Some software components need to be installed before using this instrument driver. The minimum versions of these components are listed below, and can be downloaded from the Download Site.
+
+VISA 5.0 or later
+
+Note: VISA has additional software requirements. For example, unless you are using a serial interface, 
+NI-VISA requires that NI-488.2 and/or NI-VXI be installed on your system. Check with VISA help for additional 
+support software and hardware requirements.
+
+For more details, refer to the <i>LabVIEW Help</i> under <i>Help&raquo; VI, Function, &amp; How-To Help</i>.</para>
+
+<h4>3. Known Issues</h4>
+
+
+To report issues or provide feedback about this instrument driver,  <a href="http://www.ni.com/en-us/support.html">please contact technical support</a>..
+
+
+As written, the driver only supports ASCII and Single Precision Binary transfers.  The instrument will support Double Precision Binary transfers, however the code will need to be modified to handle this transfer method.  The Data Format VI will need to be updated with this option.  The Read VIs will need modifications marked in the "Binary" case statement.
+When Configure Reference.vi is called with a Scan List,  the Relative Value will not be set, and the Relative Measurements will not be turned on. 
+Temperature Scans of sample count greater than 1 with only one channel in the scan list will not initiate the scan correctly.
+When Auto Ranging is set to False (in Configure Measurement.vi), if you are only scanning one channel with sample count greater than 1, the driver will not initiate a measurement and the read VI will timeout.  
+
+Note:  The 2701 is a TCPIP enabled device.  The instrument must be set up to use TCPIP, which can include enabling the DHCP client.  The VISA Resource Name throughout the driver will not be auto-detected and must be manually entered at the beginning of the application.  Example: "TCPIP::192.168.1.1::1394::SOCKET"
+Real-Time Clock support is not consistent across measurements (buffered only) and data transfer (binary only).  This can be achieved within LV using the LV time VIs and relative timestamps from the instrument.
+
+<h4>4. Revision History</h4>
+The latest version of this and other LabVIEW and LabWindows/CVI instrument drivers can be downloaded at the <a href = http://www.ni.com/idnet>Instrument Driver Network</a>.
+
+REV 2.0, 07/18/2005, 
+Modified by: Jaustin Ohueri, Austin, TX
+Original  release for project-style created from v1.01 of plug and play ke27xx driver.
+
+REV 2.1, 12/12/2005, 
+Minor update made on Initialize.vi:
+Line feed termination character set to 8 bit unsigned integer for the TCP/IP connection case statement.
+Minor update made on Revision Query.vi:
+
+REV 2.2, 06/09/2006, 
+New Public Utility VI (String to Numeric Array.vi)
+New Private VI (Data Parsing.vi)
+New Example VI (Acquire and Graph Time Measurement Data)
+Replaced Code in Read Data Buffer.vi and Read Multiple Direct with the private (Data Parsing.vi) subVI.
+Modified the Validate Input Switch State.vi (private VI) to fix issue with custom error overriding existing error. 
+
+REV 2.3, 04/01/08, 
+Initialize VI - Added "Send End Enable" to TCPIP Initialization case
+Updated Revision Query VI to work in a compiled application
+Modified by: Nathan Tacha, Austin,TX. 
+
+</font>
+</pre>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
