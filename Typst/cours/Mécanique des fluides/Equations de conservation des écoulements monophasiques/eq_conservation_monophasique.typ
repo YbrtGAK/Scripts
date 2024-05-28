@@ -8,16 +8,14 @@
   author: "Yann Berton",
 )
 
-
-
 #let vol = text(8pt)[V]
 
 #set math.equation(numbering:none)
 #show math.equation.where(numbering: "(1)") : it => grid(
-  columns : (1fr,3fr,1fr),
+  columns : (1fr,auto,1fr),
   [],
-  math.equation(block : true)[#rect(inset:10pt)[#it.body]],
-  align(right + horizon, "(" + str(counter( math.equation).at(it.location()).first())+ ")"))
+  math.equation(block : true)[#block(stroke : black, clip:true, inset : 6pt)[#it.body]],
+  h(20pt) + align(right + horizon, "(" + str(counter( math.equation).at(it.location()).first())+ ")"))
 
 = Contexte & Rappels de cours
 
@@ -39,14 +37,14 @@
   #table(
   columns: (1fr,1fr),
   stroke: none,
-  $ underbrace(integral_V vec(nabla)vec(F)."dV", "Divergence d'un champ" \ "vectoriel sur un volume " \ "de    " RR^3) = underbrace(integral.cont_(diff V) vec(F).vec(dS), "Flux à travers " \ "la frontière du " \ "du volume") $,
+  $ underbrace(integral_V vec(nabla)vec(F).d V, "Divergence d'un champ" \ "vectoriel sur un volume " \ "de    " RR^3) = underbrace(integral.cont_(diff V) vec(F).vec(d A), "Flux à travers " \ "la frontière du " \ "du volume") $,
   {set list(marker: ([ • ],sym.arrow))
   set text(size : 9pt)
   underline[Où :]
   [ 
   - V : Volume de $RR^3$ [$m^3$],
   - $diff V$ : Frontière de V [$m^3$],
-  - $vec(dS)$ : Vecteur normal à la surfaced tel que $vec(dS) = vec(n).dS$
+  - $vec(dS)$ : Vecteur normal à la surfaced tel que $vec(dS) = vec(n).d A$
   - $vec(F)$ : Fonction dérivable en tout point de V]}
 )]
 
@@ -294,35 +292,74 @@ Cette expression peut être inclue dans l'expression générale de *l'énergie m
 $ e #eq_df e_"méca" + u = e_"cinétique" + e_"potentielle" + u $
 Avec u l'énergie interne de la particule. 
 
-En faisant les hypothèses suivantes on peut poser un bilan d'énergie:
+L'objectif est d'établir un bilan d'énergie. Pour cela, les hypothèses suivantes sont réalisées :
 - La seule force à distance en présence est le poids :
   - L'énergie potentielle d'une particule de fluide par unité de masse est : $- vec(g).vec(z)$ avec z la hauteur,
 - Il n'y a pas de réaction chimique, nucléaire ou de production/génération de chaleur au sein du fluide.
 
+Ainsi, on peut poser l'équation de conservation d'énergie suivante : 
+
 #{
-show text : it => text(size: 7.55pt,it)
-align(center,
-math.equation()[$ 
+
+math.equation(numbering : "(1)", supplement : "l'équation", block : true)[#text(size:7pt,$ 
 underbrace(
   derpt(,t) integral_V (rho. u + 1/2. rho. vec(v)^2 - rho. vec(g). vec(z)). d V,
   "Variation d'énergie dans V"
 ) 
 +
 underbrace(
-  derpt(,t) integral_A (rho. u + 1/2. rho. vec(v)^2  - rho. vec(z). vec(g)). vec(v). vec(n). d A,
+  derpt(,t) integral_A (rho . u + 1/2. rho. vec(v)^2  - rho. vec(z). vec(g)). vec(v). vec(n). d A,
   "Flux d'énergie à travers A"
 ) 
 = 
 underbrace(
-  integral_A (dot(q).vec(n)). d A,
+  integral_A (vec(dot(q)).vec(n)). d A,
   "Flux de chaleur " \ "au travers A"
 ) 
 +
 underbrace(
-   integral_A vec(n). (tau. vec(n)). d A,
+   integral_A vec(n). (sigma. vec(n)). d A,
   "Variation d'énergie due " \ "aux forces surfaciques"
 ) 
+$ ) <bilan_energie>
 
-$])
+]
 }
-#text(fill:red)[Attention ici problème avec tau dans la démonstration de cauchy : est-ce un scalaire ? un tenseur ? ]
+
+Où : 
+- $vec(dot(q))$ est le vecteur de densité de flux de chaleur au travers de la surface A,
+- $integral_A vec(n). (sigma. vec(n)). d A$ est obtenu en appliquant le théorème de Cauchy à l'expression de la variation d'énergie due aux forces surfaciques $integral_A (sigma. v).d A$,
+
+En remarquant que le volume est indépendant du temps, puis en appliquant le théorème de la divergence, il vient : 
+
+$ derpt(,t) [rho. (u + 1/2. v^2 - vec(g). vec(z))] + nablav[rho. vec(v). (u + 1/2. vec(v)^2  - vec(g))] = -nablav vec(q) + nablav(sigma. vec(v)) $
+
+Développons les expressions de l'énergie cinétique, de l'énergie interne et de l'énergie potentielle spécifiques dans le terme de gauche : 
+
+- $derpt(,t) [rho. (u + 1/2. v^2)] = rho. derpt(,t)(u + 1/2. v^2) + derpt(rho,t). (u + 1/2. v^2 )$
+- $nablav[rho. vec(v). (u + 1/2. v^2)] =  nablav (rho.  vec(v)) .(u + 1/2. vec(v)^2 )  + (rho. vec(v)). nablav(u+ 1/2. v^2)$
+- $derpt(,t) (rho. vec(g). vec(z)) + nablav. (rho. vec(v). vec(g). vec(z)) &= vec(g). vec(z). derpt(rho,t) + rho. derpt(,t). (vec(g). vec(z)) + vec(g). vec(z). nablav(rho. vec(v)) + rho. vec(v). nablav(vec(g). vec(z)) \
+
+$
+
+Donc : 
+#{
+set text(size:7pt) 
+$
+derpt(,t) [rho. (u + 1/2. v^2)] + nablav[rho. vec(v). (u + 1/2. v^2)] = 
+rho. derpt(,t)(u + 1/2. v^2)  +  (rho. vec(v)). nablav(u+ 1/2. v^2) + (u + 1/2. v^2). (derpt(rho,t) + nablav(rho. vec(v)))
+$}
+
+On peut remplacer dans ces termes @equation_continuite de conservation de la masse : 
+$
+&derpt(,t) [rho. (u + 1/2. v^2)] + nablav[rho. vec(v). (u + 1/2. v^2)] = 
+rho. derpt(,t)(u + 1/2. v^2)  +  (rho. vec(v)). nablav(u+ 1/2. v^2) \
+so &derpt(,t) [rho. (u + 1/2. v^2)] + nablav[rho. vec(v). (u + 1/2. v^2)] = rho. Der(,) (u + 1/2. abs(vec(v))^2) 
+$
+Egalement, on peut introduire la dérivée particulaire dans l'expression de l'énergie potentielle : \
+$ derpt(,t) (rho. vec(g). vec(z)) + nablav. (rho. vec(v). vec(g). vec(z)) &= vec(g). vec(z). derpt(rho,t) + vec(g). vec(z). nablav(rho. vec(v)) + rho.(derpt(,t) (vec(g). vec(z)) + vec(v). nablav(vec(g). vec(z))) \
+&= vec(g). vec(z). derpt(rho,t) + vec(g). vec(z). nablav(rho. vec(v)) + rho. Der(,).(vec(g). vec(z))
+$
+L'accélération de la pesanteur étant une constante du temps et de l'espace ($nablav(vec(g). vec(z) = rho .vec(g))$
+, il vient finalement : 
+
