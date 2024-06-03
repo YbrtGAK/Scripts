@@ -285,7 +285,7 @@ Finalement, on obtient l'équation de conservation de l'énergie mécanique :
 #math.equation(numbering:"(1)",
 supplement : "l'équation",
 block : true)[$
-& rho. Der("")(1/2. abs(abs(vec(v)))^2) = -vec(v). nabla P + vec(v). (rho. vec(g)) + vec(v).nablav tensor(sigma_D)
+& rho. Der("")(1/2. abs(abs(vec(v)))^2) = -vec(v). nablav P + vec(v). (rho. vec(g)) + vec(v).nablav tensor(sigma_D)
 $] <eq_cons_Emeca>
 
 Cette expression peut être inclue dans l'expression générale de *l'énergie massique totale e* d'une particule où : 
@@ -331,8 +331,8 @@ Où :
 - $integral_A vec(n). (sigma. vec(n)). d A$ est obtenu en appliquant le théorème de Cauchy à l'expression de la variation d'énergie due aux forces surfaciques $integral_A (sigma. v).d A$,
 
 En remarquant que le volume est indépendant du temps, puis en appliquant le théorème de la divergence, il vient : 
-
-$ derpt(,t) [rho. (u + 1/2. v^2 - vec(g). vec(z))] + nablav[rho. vec(v). (u + 1/2. vec(v)^2  - vec(g))] = -nablav vec(q) + nablav(sigma. vec(v)) $
+#math.equation(numbering : "(1)", supplement : "l'équation", block : true)[
+$ derpt(,t) [rho. (u + 1/2. v^2 - vec(g). vec(z))] + nablav[rho. vec(v). (u + 1/2. vec(v)^2  - vec(g))] = -nablav vec( dot(q)) + nablav(sigma. vec(v)) $] <equation_8>
 
 Développons les expressions de l'énergie cinétique, de l'énergie interne et de l'énergie potentielle spécifiques dans le terme de gauche : 
 
@@ -342,7 +342,7 @@ Développons les expressions de l'énergie cinétique, de l'énergie interne et 
 
 $
 
-Donc : 
+En sommant l'énergie cinétique et l'énergie interne il vient : 
 #{
 set text(size:7pt) 
 $
@@ -353,13 +353,27 @@ $}
 On peut remplacer dans ces termes @equation_continuite de conservation de la masse : 
 $
 &derpt(,t) [rho. (u + 1/2. v^2)] + nablav[rho. vec(v). (u + 1/2. v^2)] = 
-rho. derpt(,t)(u + 1/2. v^2)  +  (rho. vec(v)). nablav(u+ 1/2. v^2) \
-so &derpt(,t) [rho. (u + 1/2. v^2)] + nablav[rho. vec(v). (u + 1/2. v^2)] = rho. Der(,) (u + 1/2. abs(vec(v))^2) 
+rho. derpt(,t)(u + 1/2. v^2)  +  (rho. vec(v)). nablav(u+ 1/2. v^2)
 $
+Donc : 
+#math.equation(numbering : "(1)", supplement : "l'équation", block : true)[
+$
+&derpt(,t) [rho. (u + 1/2. v^2)] + nablav[rho. vec(v). (u + 1/2. v^2)] = rho. Der(,) (u + 1/2. abs(vec(v))^2) 
+$] <equation_somme_u_Ec>
 Egalement, on peut introduire la dérivée particulaire dans l'expression de l'énergie potentielle : \
 $ derpt(,t) (rho. vec(g). vec(z)) + nablav. (rho. vec(v). vec(g). vec(z)) &= vec(g). vec(z). derpt(rho,t) + vec(g). vec(z). nablav(rho. vec(v)) + rho.(derpt(,t) (vec(g). vec(z)) + vec(v). nablav(vec(g). vec(z))) \
 &= vec(g). vec(z). derpt(rho,t) + vec(g). vec(z). nablav(rho. vec(v)) + rho. Der(,).(vec(g). vec(z))
 $
-L'accélération de la pesanteur étant une constante du temps et de l'espace ($nablav(vec(g). vec(z) = rho .vec(g))$
-, il vient finalement : 
+L'accélération de la pesanteur étant une constante du temps et de l'espace : $rho. Der(,).(vec(g). vec(z)) = rho. vec(g). vec(v)$. De plus, en factorisant les deux autres termes par $vec(g). vec(z)$, on introduit l'équation de continuité (@equation_continuite) : 
 
+$ &derpt(,t) (rho. vec(g). vec(z)) + nablav. (rho. vec(v). vec(g). vec(z)) = vec(g). vec(z). underbrace((derpt(rho,t) +nablav(rho. vec(v))),"= 0") + rho. vec(g). vec(v) \ 
+$
+#math.equation(numbering : "(1)", supplement : "l'équation", block : true)[
+$ &derpt(,t) (rho. vec(g). vec(z)) + nablav. (rho. vec(v). vec(g). vec(z)) = rho. vec(g). vec(v) $] <equation_10>
+
+Finalement, en repartant de @equation_8 de conservation d'énergie, on peut injecter les nouvelles expressions des énergies cinétique, interne, et potentielle développées dans @equation_somme_u_Ec et  @equation_10 : 
+
+$ &derpt(,t) [rho. (u + 1/2. v^2 - vec(g). vec(z))] + nablav[rho. vec(v). (u + 1/2. vec(v)^2  - vec(g))] = -nablav vec(dot(q)) + nablav(sigma. vec(v)) \
+so & rho. Der(,) (u + 1/2. abs(vec(v))^2) - rho. vec(g). vec(v) = -nablav vec(dot(q)) + nablav(sigma. vec(v)) \
+so &rho. Der(,) (u + 1/2. abs(vec(v))^2) = -nablav vec(dot(q)) + rho. vec(g). vec(v) + nablav(sigma. vec(v))
+$
