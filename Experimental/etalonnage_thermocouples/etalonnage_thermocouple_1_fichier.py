@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 """
-17/05/2024 - This script aims to calibrate thermocouples
+Created on Tue Jun  4 16:13:50 2024
 
-@author: Yann BERTON
+@author: Y.Berton
 """
 
 #Imports
@@ -21,8 +22,9 @@ from sklearn.linear_model import LinearRegression #Library for machine learning 
 
 #Choose to display graphs
 disp_graph = True #Display graph if true : not necessary for the calibration
-one_file_per_temp = False #If true, you need to have the following architecture :
-    
+
+one_file_per_temp = False 
+#If true, you need to have the following architecture :    
 """
 main folder
         - Tcons_1
@@ -35,6 +37,8 @@ main folder
             - [...]
         - [...]
 """
+#If false, just point to your csv file (or lvm, or txt)
+
 
 #File exploring function
 def getADirPath(): 
@@ -46,39 +50,61 @@ def getADirPath():
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                          Get the data in DataFrames
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if one_file_per_temp : 
-    M = [] #Initialization of the matrix of the measurements
-    LfoldersPath = [e[0] for e in os.walk(getADirPath())] #Get the directories path
-    del(LfoldersPath[0]) #Delete first element (parent directory path)
-    subDirNames = next(os.walk(getADirPath()))[1] #Get subdirectories names
-    for path in LfoldersPath : #Get the measurement files path
-        M.append(os.listdir(path))
-    
-    
-    Ldf = [] # Initialization of the list of the dataframes
-    #Get data from each folder
-    #skiprows : number of lines to ignore from the file (withdraw header). To be adapted to each measure file ! 
-    for i in range(len(M)) :
-        dfs = [pd.read_csv(LfoldersPath[i] + '/' + file,sep='\t', on_bad_lines='skip',skiprows=22) for file in M[i]] #Skiprow : withdraw header
-        Ldf.append(pd.concat(dfs)) #For a given temperature, concat the dataframes in a single one
-        
-else : 
-    file_path = getAFilesPath()
-    
-    Ldf = [df.filter(['T_PH_in (wall)','T_PH_surf3', 'T_PH_surf4']) for df in Ldf] #Select the desired measurements - to be adapted
-    Lwasted = 'T_PH_surf1','T_PH_surf2' #List of the broken thermocouples
 
+file_path = getAFilesPath()
+df = pd.read_csv(file_path, sep='\t', on_bad_lines='skip',skiprows=22, decimal=',')
+df = df.filter(['T_PH_in (wall)','T_PH_surf2', 'T_PH_surf3', 'T_PH_surf4'])
+   
+"""Dumb check
+%matplotlib qt5
+df.plot()
+fig, axs = plt.subplots(2,2)
+axs[0][0].scatter(df.index, df.iloc[:,0], label=df.columns[0],s=0.1)
+axs[0][1].scatter(df.index, df.iloc[:,1], label=df.columns[1],s=0.1)
+axs[1][0].scatter(df.index, df.iloc[:,2], label=df.columns[2],s=0.1)
+axs[1][1].scatter(df.index, df.iloc[:,3], label=df.columns[3],s=0.1)
+for ax in axs :
+    for a in ax :
+        a.legend()
+        a.grid()
+"""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                             Measures treatments
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#The idea here is to get rid of the transition state in between a change of the calibration
+#bench's temperature of reference
+#In order to do so, a standart deviation calculus is calculated for each temperature value
+#over the four last values
+#If it is under a certain value to be defined by the user, then the measure is erased
+
+###############Let's make sure that the steady state was reached###############
+
+df = df[df.index < 2200] #Cut the experimental data corresponding to the end of the calibration
+df_raw = df.copy() #We save the raw value in a unbinded dataframe
+
+#Get the temperature used for the calibration from user
+print("Give the temperatures used for the calibration (one by one): \n")
+LT = [float(input()) for i in range(0,8)] 
+
+#We find in between temp in order to split the dataframe in several ones for a giver reference temmperature
+LT_to_sort = [(LT[i] + LT[i+1])/2 for i in range(0,7)]
+
+#Now we sort them. Here, the first column (corresponding to the "first" thermocouple)
+#is used in order to split df. Make sure it is not broken before using it for this task.
+#It is broken ? Change the indice 0 with another one to avoid issues.
+
+Ldfs = []
+for Tmax in LT_to_sort : 
+    df_left = df[df.iloc[:,0] < Tmax]
+    df = df[df.iloc[:,0] > Tmax]
+    Ldfs.append(df_left)
 
 Ldf_treated = [] #Initialization of treated list of dataframes 
 LTmean = [] #Initialization of Tmean array
 
-for i in range(len(Ldf)): #Going through all the dataframes for each temperature test
-    df = Ldf[i] # Get the dataframe
-    T = subDirNames[i] #Get the temperature value (serve no purpose in the code)
+for i in range(len(Ldfs)): #Going through all the dataframes for each temperature test
+    df = Ldfs[i] # Get the dataframe
     
     #Let's make sure that the steady state was reached
     df_std = df.rolling(4).std() #Get a standart deviation for each value according 4 of its previous ones
@@ -104,12 +130,13 @@ for i in range(len(Ldf)): #Going through all the dataframes for each temperature
     #Add the mean temperature to a list
     LTmean.append(Tmean)
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                 Calibration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 #Creation of a dictionnary with the mean temperatures
-index = [float(e) for e in subDirNames]
+index = LT
 columns = cols
 data = LTmean
 
