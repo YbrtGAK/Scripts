@@ -10,14 +10,31 @@ import matplotlib.pyplot as plt #Library for graphs
 
 #Libraries for file exploring
 import os 
-import tkinter as tk
-from tkinter import filedialog
+import tkinter as tk  #Note : no mandotory, if you don't want to install tk package
+from tkinter import filedialog #give the paths manually
+from utilities import getAFilesPath 
 
 import numpy as np #Library for vectorial objects
 from sklearn.linear_model import LinearRegression #Library for machine learning tools
 
-#Flag - Choose to display graphs
+#Flags
+
+#Choose to display graphs
 disp_graph = True #Display graph if true : not necessary for the calibration
+one_file_per_temp = False #If true, you need to have the following architecture :
+    
+"""
+main folder
+        - Tcons_1
+            - Tcons_1a.lvm
+            - Tcons_1b.lvm
+            - [...]
+        - Tcons_2
+            - [...]
+        - Tcons_3
+            - [...]
+        - [...]
+"""
 
 #File exploring function
 def getADirPath(): 
@@ -29,25 +46,27 @@ def getADirPath():
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                          Get the data in DataFrames
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-M = [] #Initialization of the matrix of the measurements
-LfoldersPath = [e[0] for e in os.walk(getADirPath())] #Get the directories path
-del(LfoldersPath[0]) #Delete first element (parent directory path)
-subDirNames = next(os.walk(getADirPath()))[1] #Get subdirectories names
-for path in LfoldersPath : #Get the measurement files path
-    M.append(os.listdir(path))
-
-
-Ldf = [] # Initialization of the list of the dataframes
-#Get data from each folder
-#skiprows : number of lines to ignore from the file (withdraw header). To be adapted to each measure file ! 
-for i in range(len(M)) :
-    dfs = [pd.read_csv(LfoldersPath[i] + '/' + file,sep='\t', on_bad_lines='skip',skiprows=22) for file in M[i]] #Skiprow : withdraw header
-    Ldf.append(pd.concat(dfs)) #For a given temperature, concat the dataframes in a single one
+if one_file_per_temp : 
+    M = [] #Initialization of the matrix of the measurements
+    LfoldersPath = [e[0] for e in os.walk(getADirPath())] #Get the directories path
+    del(LfoldersPath[0]) #Delete first element (parent directory path)
+    subDirNames = next(os.walk(getADirPath()))[1] #Get subdirectories names
+    for path in LfoldersPath : #Get the measurement files path
+        M.append(os.listdir(path))
     
-
-Ldf = [df.filter(['T_PH_in (wall)','T_PH_surf3', 'T_PH_surf4']) for df in Ldf] #Select the desired measurements - to be adapted
-Lwasted = 'T_PH_surf1','T_PH_surf2' #List of the broken thermocouples
+    
+    Ldf = [] # Initialization of the list of the dataframes
+    #Get data from each folder
+    #skiprows : number of lines to ignore from the file (withdraw header). To be adapted to each measure file ! 
+    for i in range(len(M)) :
+        dfs = [pd.read_csv(LfoldersPath[i] + '/' + file,sep='\t', on_bad_lines='skip',skiprows=22) for file in M[i]] #Skiprow : withdraw header
+        Ldf.append(pd.concat(dfs)) #For a given temperature, concat the dataframes in a single one
+        
+else : 
+    file_path = getAFilesPath()
+    
+    Ldf = [df.filter(['T_PH_in (wall)','T_PH_surf3', 'T_PH_surf4']) for df in Ldf] #Select the desired measurements - to be adapted
+    Lwasted = 'T_PH_surf1','T_PH_surf2' #List of the broken thermocouples
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

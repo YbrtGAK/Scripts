@@ -40,6 +40,10 @@ $
 Où : \
 
 $
-H = n/(n-1). (P_infinity (t) + B)/rho_L . [((P+B)/(P_infinity (t) + B))^((n-1)/n) - 1],
-c = c_0. ((rho_g (t) - 2. sigma/R + B)/(P_infinity (t) + B))^((n-1)/(2.n))
+cases(
+H &= n/(n-1). (P_infinity (t) + B)/rho_L . [((P+B)/(P_infinity (t) + B))^((n-1)/n) - 1],
+c &= c_0. ((rho_g (t) - 2. sigma/R + B)/(P_infinity (t) + B))^((n-1)/(2.n)),
+dot(H) &= D/(p_infinity (t)+ B). H - D/rho. ((P+B)/(P_infinity (t) + B))^((n-1)/n) + dot(R)/(rho_L . R). [(p_infinity(t) + B)/(P+B)]^(1/n). [(2. sigma)/R - 3. k. rho_g (t)]
+)
+
 $
