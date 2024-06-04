@@ -22,27 +22,30 @@ align(center)[$ chi  $], [Martinelli parameter [-]],[Ratio of pressure drops of 
 
 align(center)[$ epsilon  $], [Void fraction [-]],[Fraction of the channel volume that is occupied by the gas phase],[$ epsilon = A_v/(A_v + A_l) $],
 
-align(center)[$ lambda_c  $], [Capillary lenth [m]],[Length scaling factor that relates surface tension and gravity],[$ lambda_c = sqrt(gamma/(Delta rho g)) $],
+align(center)[$ lambda_c  $], [Capillary lenth [m]],[Length scaling factor that relates surface tension and gravity],[$ lambda_c = sqrt(gamma/(Delta rho. g)) $],
 
-align(center)[$B_o$], [Bond number [-]],[Mesure the importance of gravitational forces compared to surface tension forces for the liquid front's movement],[$ B_0 = (L_c/lambda_c)^2 =(Delta rho . g.L_c^2)/sigma $],
+align(center)[$B_o$], [Bond number [-]],[Mesure the importance of gravitational forces compared to surface tension forces for the liquid front's movement],[$ B_0 = (L_c/lambda_c)^2 =(Delta rho . g.d_H^2)/sigma $],
 
 align(center)[$C_o$], [Confinement number [-]],[],[$ C_o = 1/sqrt(B_o) = 1/L_c . sqrt(sigma/(g. Delta rho)) $],
 
 align(center)[CHF], [Critical Heat flux [-]],[Heat flux at which boiling ceases to be an effective form of transferring heat from a solid surface to a liquid],[$ q/A_max="CHF".rho_v [(sigma . g.(Delta rho))/(Rho_v^2)]^(1/4) (1+ rho_v/rho_L) #footnote[Zuber, Novak (June 1959). "Hydrodynamic aspects of boiling heat transfer". doi:10.2172/4175511. Retrieved 4 April 2016.] $ ],
 
+align(center)[Eö], [Eötvos [-]],[Criterion for defining the two-phase macro-to-microchannel transition],[$ "Eö" = (g. Delta rho. lambda_c^2)/(8. sigma) $],
+
 align(center)[$F_o$],[Froude number [-]],[Ratio of the flow inertia to the external field (the latter in many applications simply due to gravity)],[$ F_0=u/(sqrt(g.L)) $],
 
-align(center)[$f$],[Fanning friction factor [-]],[Ratio of the local shear stress with the local flow kinetic energy density],[$ f= tau/(rho. (u^2)/2) $],
+align(center)[$f$],[Fanning friction factor [-]],[Ratio of the local shear stress with the local flow kinetic energy density],[$ f= tau/(rho*(u^2)/2) $],
 
 align(center)[HTC], [Heat Transfert Coefficient [-]],[Proportionality constant between the heat flux and temperature difference],[$ "HTC"=q/(Delta T) $],
 
-align(center)[ONB], [Onset of Nucleate Boilling [-]],[Onset activation for the first nucleation sites. "the point of net vapor generation"#footnote[Kandlikar, S. G. « Heat Transfer Characteristics in Partial Boiling, Fully Developed Boiling, and Significant Void Flow Regions of Subcooled Flow Boiling ». Journal of Heat Transfer 120, nᵒ 2 (1 mai 1998): 395‑401. https://doi.org/10.1115/1.2824263.
-]],align(center)[N/A],
+align(center)[ONB], [Onset of Nucleate Boilling [-]],[Onset activation for the first nucleation sites],align(center)[N/A],
 
-align(center)[OSV], [Onset of Significant Void [-]],[Incipient of increased vapor convection : bubbles begin moving toward the core : $Q_"vapor"=0^+$],align(center)[N/A],
+align(center)[OSV], [Onset of Significant Void [-]],[Incipient of increased vapor convection : bubbles begin moving toward the core],align(center)[N/A],
 
 align(center)[s],[Symmetry [-]],[Mesure of the none-uniformity of the liquid's level around the canal's perimeter [-]],[$ s=d_"top"/r = 1 - (t_"bottom" - t_"top")/d $],
 
 align(center)[Y], [Chisholm parameter [-]],[Ratio of pressure drops of single-phase flow terms considering they occupy the whole volume each],[$ Y = sqrt(("dp/dz")_"lo"/("dp/dz")_"vo")  $],
+
+
 )]
 }
