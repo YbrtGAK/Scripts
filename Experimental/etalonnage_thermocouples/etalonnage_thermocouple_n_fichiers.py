@@ -16,9 +16,9 @@ from utilities import getAFilesPath
 
 import numpy as np #Library for vectorial objects
 from sklearn.linear_model import LinearRegression #Library for machine learning tools
+from scipy.optimize import least_squares
 
 #Flags
-
 #Choose to display graphs
 disp_graph = True #Display graph if true : not necessary for the calibration
 
@@ -129,6 +129,10 @@ La,Lb,Lr_sq = linear_regression(df_mean)
 
 #Fitting function
 f_lin = lambda x,a,b : a*x + b
+
+#Least squared method
+fcost = lambda y,x,a,b : y - a*x - b
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                Display graphs 

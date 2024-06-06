@@ -17,6 +17,7 @@ from utilities import getAFilesPath
 
 import numpy as np #Library for vectorial objects
 from sklearn.linear_model import LinearRegression #Library for machine learning tools
+from scipy.optimize import least_squares
 
 #Flags
 
@@ -149,7 +150,7 @@ def linear_regression(df_mean) :
     La, Lb, Lr_sq = [], [], [] #Empty list initialization
     for col in df_mean.columns:
         x = np.array(df_mean.index.values).reshape((-1,1)) #Shape array for regression purposes
-        y = np.array(df_mean[col].values) #Same
+        y = np.array(df_mean.index.values - df_mean[col].values) #Same
         model = LinearRegression().fit(x,y) #Linear regression 
         La.append(model.coef_) #Get the slope coefficient (a)
         Lb.append(model.intercept_) #Get the coefficient of interception (b)
@@ -162,6 +163,18 @@ La,Lb,Lr_sq = linear_regression(df_mean)
 #Fitting function
 f_lin = lambda x,a,b : a*x + b
 
+#Least squared method
+yexp = np.array([line[0] for line in LTmean])
+ytheo = np.array(LT)
+fcost = lambda coeff : ytheo - coeff[0]*yexp - coeff[1]
+
+#Exemple avec thermocouple 1
+coeff_0 = np.array([La[0][0], Lb[0]])
+res = least_squares(fcost, coeff_0)
+new_coeff = res.x
+
+
+print(fcost(coeff_0))
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                Display graphs 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -179,6 +192,7 @@ if disp_graph :
         else : 
             textstr.append('\n'.join((r'y = %.5f.x + %.5f '%(La[i], Lb[i]), #Regression label creation
                                       r'R² = %f'%( Lr_sq[i]))))
+    T_fit.append(f_lin(T_abs_fit, new_coeff[0], new_coeff[1]))
         
     #Display of the 3 temperatures in place
     phi = (1+5**0.5)/2 #Golden number to size graphs
@@ -194,7 +208,7 @@ if disp_graph :
     #Plot the measured temperature by the thermocouple
     axs[0][0].scatter(df_mean.index, df_mean.iloc[:,0],color='b', label = df_mean.columns[0])
     #Plot the fitted function's curve
-    axs[0][0].plot(T_abs_fit, T_fit[0], color='b', label = 'Trend line')
+    axs[0][0].plot(T_abs_fit, T_fit[-1], color='b', label = 'Reg trend line')
     #Place a text box in bottom right in axis coords
     axs[0][0].text(0.55, 0.1, textstr[0], transform=axs[0][0].transAxes, fontsize=10,
             verticalalignment='baseline', bbox=props)
@@ -212,10 +226,8 @@ if disp_graph :
             verticalalignment='baseline', bbox=props)
     
     #Plot the fourth thermocouple's fit
-    y_pred = f_lin(T_abs_fit,(1-La[3]), Lb[3])
     axs[1][1].scatter(df_mean.index, df_mean.iloc[:,3],color='purple', label = df_mean.columns[3])
     axs[1][1].plot(T_abs_fit, T_fit[3], color='purple', label = 'Trend line')
-    axs[1][1].plot(T_abs_fit, y_pred, color='red', label = 'Fit')
     axs[1][1].text(0.55, 0.1, textstr[3], transform=axs[1][1].transAxes, fontsize=10,
             verticalalignment='baseline', bbox=props)
     
@@ -230,4 +242,6 @@ if disp_graph :
             a.grid() #Display a grid
 
 
-    
+Ttest = [e[0] for e in LTmean]
+Ttest2 = [e[-1] for e in LTmean]
+
