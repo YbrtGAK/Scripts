@@ -53,7 +53,7 @@ def getADirPath():
 
 file_path = getAFilesPath()
 df = pd.read_csv(file_path, sep='\t', on_bad_lines='skip',skiprows=22, decimal=',')
-df = df.filter(['T_PH_in (wall)','T_PH_surf2', 'T_PH_surf3', 'T_PH_surf4'])
+df = df.filter(['T_PH_in (wall)', 'T_PH_surf3', 'T_PH_surf4', 'T_PH_surf2'])
    
 """Dumb check
 %matplotlib qt5
@@ -84,8 +84,7 @@ df = df[df.index < 2200] #Cut the experimental data corresponding to the end of 
 df_raw = df.copy() #We save the raw value in a unbinded dataframe
 
 #Get the temperature used for the calibration from user
-print("Give the temperatures used for the calibration (one by one): \n")
-LT = [float(input()) for i in range(0,8)] 
+LT = [15,30,45,60,75,90,105,120] #Temperatures used for the calibration
 
 #We find in between temp in order to split the dataframe in several ones for a giver reference temmperature
 LT_to_sort = [(LT[i] + LT[i+1])/2 for i in range(0,7)]
@@ -94,11 +93,12 @@ LT_to_sort = [(LT[i] + LT[i+1])/2 for i in range(0,7)]
 #is used in order to split df. Make sure it is not broken before using it for this task.
 #It is broken ? Change the indice 0 with another one to avoid issues.
 
-Ldfs = []
+Ldfs = [] #Initializing list of dataframe
 for Tmax in LT_to_sort : 
-    df_left = df[df.iloc[:,0] < Tmax]
-    df = df[df.iloc[:,0] > Tmax]
-    Ldfs.append(df_left)
+    df_left = df[df.iloc[:,0] < Tmax] #Cut data to add to the dataframe list
+    df = df[df.iloc[:,0] >= Tmax] #Cut this data from df
+    Ldfs.append(df_left) #Append the cut dataframe to the list of dataframe
+Ldfs.append(df) #Finally, append the remaing data in df as the last dataframe of the list
 
 Ldf_treated = [] #Initialization of treated list of dataframes 
 LTmean = [] #Initialization of Tmean array
@@ -185,39 +185,49 @@ if disp_graph :
     Tmax = df_mean.index[-1] #For graph scaling purposes, get T max
     
     #3 Subplots graph initialization
-    fig, axs = plt.subplots(3, constrained_layout=True, figsize=(2*3,2*3*phi))
+    fig, axs = plt.subplots(2,2, constrained_layout=True, figsize=(2*3*phi,2*3))
     
     #State box proprieties to display the fitting function expression
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
     
     #Plot the first thermocouple's fit
     #Plot the measured temperature by the thermocouple
-    axs[0].scatter(df_mean.index, df_mean.iloc[:,0],color='b', label = df_mean.columns[0])
+    axs[0][0].scatter(df_mean.index, df_mean.iloc[:,0],color='b', label = df_mean.columns[0])
     #Plot the fitted function's curve
-    axs[0].plot(T_abs_fit, T_fit[0], color='b', label = 'Trend line')
+    axs[0][0].plot(T_abs_fit, T_fit[0], color='b', label = 'Trend line')
     #Place a text box in bottom right in axis coords
-    axs[0].text(0.65, 0.1, textstr[0], transform=axs[0].transAxes, fontsize=10,
+    axs[0][0].text(0.55, 0.1, textstr[0], transform=axs[0][0].transAxes, fontsize=10,
             verticalalignment='baseline', bbox=props)
     
     #Plot the second thermocouple's fit
-    axs[1].scatter(df_mean.index, df_mean.iloc[:,1],color='r', label = df_mean.columns[1])
-    axs[1].plot(T_abs_fit, T_fit[1], color='r', label = 'Trend line')
-    axs[1].text(0.65, 0.1, textstr[1], transform=axs[1].transAxes, fontsize=10,
+    axs[0][1].scatter(df_mean.index, df_mean.iloc[:,1],color='r', label = df_mean.columns[1])
+    axs[0][1].plot(T_abs_fit, T_fit[1], color='r', label = 'Trend line')
+    axs[0][1].text(0.55, 0.1, textstr[1], transform=axs[0][1].transAxes, fontsize=10,
             verticalalignment='baseline', bbox=props)
     
     #Plot the third thermocouple's fit
-    axs[2].scatter(df_mean.index, df_mean.iloc[:,2],color='g', label = df_mean.columns[2])
-    axs[2].plot(T_abs_fit, T_fit[2], color='g', label = 'Trend line')
-    axs[2].text(0.65, 0.1, textstr[2], transform=axs[2].transAxes, fontsize=10,
+    axs[1][0].scatter(df_mean.index, df_mean.iloc[:,2],color='g', label = df_mean.columns[2])
+    axs[1][0].plot(T_abs_fit, T_fit[2], color='g', label = 'Trend line')
+    axs[1][0].text(0.55, 0.1, textstr[2], transform=axs[1][0].transAxes, fontsize=10,
             verticalalignment='baseline', bbox=props)
+    
+    #Plot the fourth thermocouple's fit
+    y_pred = f_lin(T_abs_fit,(1-La[3]), Lb[3])
+    axs[1][1].scatter(df_mean.index, df_mean.iloc[:,3],color='purple', label = df_mean.columns[3])
+    axs[1][1].plot(T_abs_fit, T_fit[3], color='purple', label = 'Trend line')
+    axs[1][1].plot(T_abs_fit, y_pred, color='red', label = 'Fit')
+    axs[1][1].text(0.55, 0.1, textstr[3], transform=axs[1][1].transAxes, fontsize=10,
+            verticalalignment='baseline', bbox=props)
+    
     
     #Action to do for all subplots/thermocouple analysis
     for ax in axs : 
-        ax.set_xlabel('Targeted temperature [°C]') #Set x label
-        ax.set_ylabel('Measured temperature [°C]') #Set y label
-        ax.plot(df_mean.index,df_mean.index,'--k',linewidth=2, label=r'$id_E$') #Display identity function's curve
-        ax.legend() #Display legend
-        ax.grid() #Display a grid
-        
-    
+        for a in ax:
+            a.set_xlabel('Targeted temperature [°C]') #Set x label
+            a.set_ylabel('Measured temperature [°C]') #Set y label
+            a.plot(df_mean.index,df_mean.index,'--k',linewidth=2, label=r'$id_E$') #Display identity function's curve
+            a.legend() #Display legend
+            a.grid() #Display a grid
+
+
     
