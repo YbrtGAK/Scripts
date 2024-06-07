@@ -42,5 +42,13 @@ Cache_Path[Path] Line0001 = "/C/Users/yberton/AppData/Local/Temp/AB_Cache_{E608"
 Cache_Path[Path] Line0002 = "66DD-61C5-4859-97D2-1C7F03B349FF}.txt"
 
 [ProjectWindow_Data]
-ProjectExplorer.ClassicPosition[String] = "37,4,690,1280"
+ProjectExplorer.ClassicPosition[String] = "33,1,676,1273"
+
+[AB_Cache_{20FAA98F-92F8-4C4A-BD63-90DD7978E4D2}]
+Cache_Path[Path] Line0001 = "/C/Users/yberton/AppData/Local/Temp/AB_Cache_{20FA"
+Cache_Path[Path] Line0002 = "A98F-92F8-4C4A-BD63-90DD7978E4D2}.txt"
+
+[AB_Cache_{0A6070C3-A7A1-49E0-B47B-4C54F297FBF6}]
+Cache_Path[Path] Line0001 = "/C/Users/yberton/AppData/Local/Temp/AB_Cache_{0A60"
+Cache_Path[Path] Line0002 = "70C3-A7A1-49E0-B47B-4C54F297FBF6}.txt"
 

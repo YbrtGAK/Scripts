@@ -34,9 +34,7 @@
 		<Item Name="Dépendances" Type="Dependencies">
 			<Item Name="instr.lib" Type="Folder">
 				<Item Name="Keithley 27XX.lvlib" Type="Library" URL="/&lt;instrlib&gt;/Keithley 27XX/Keithley 27XX.lvlib"/>
-				<Item Name="Configure Output Limits.vi" Type="VI" URL="/&lt;instrlib&gt;/Sorensen SG Series/Public/Configure/Configure Output Limits.vi"/>
 				<Item Name="Sorensen SG Series.lvlib" Type="Library" URL="/&lt;instrlib&gt;/Sorensen SG Series/Sorensen SG Series.lvlib"/>
-				<Item Name="Error Query.vi" Type="VI" URL="/&lt;instrlib&gt;/Sorensen SG Series/Public/Utility/Error Query.vi"/>
 			</Item>
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="Waveform Array To Dynamic.vi" Type="VI" URL="/&lt;vilib&gt;/express/express shared/transition.llb/Waveform Array To Dynamic.vi"/>
@@ -295,6 +293,7 @@
 				<Item Name="VISA Configure Serial Port" Type="VI" URL="/&lt;vilib&gt;/Instr/_visa.llb/VISA Configure Serial Port"/>
 				<Item Name="VISA Configure Serial Port (Instr).vi" Type="VI" URL="/&lt;vilib&gt;/Instr/_visa.llb/VISA Configure Serial Port (Instr).vi"/>
 				<Item Name="VISA Configure Serial Port (Serial Instr).vi" Type="VI" URL="/&lt;vilib&gt;/Instr/_visa.llb/VISA Configure Serial Port (Serial Instr).vi"/>
+				<Item Name="Merge Errors.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Merge Errors.vi"/>
 			</Item>
 			<Item Name="lvStorage.dll" Type="Document" URL="lvStorage.dll">
 				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>
@@ -339,6 +338,47 @@
 				<Property Name="TgtF_productName" Type="Str">My Application</Property>
 				<Property Name="TgtF_targetfileGUID" Type="Str">{31A6A33F-49EE-41D3-A347-6E80A41E7AA3}</Property>
 				<Property Name="TgtF_targetfileName" Type="Str">Application.exe</Property>
+				<Property Name="TgtF_versionIndependent" Type="Bool">true</Property>
+			</Item>
+			<Item Name="test_etal" Type="EXE">
+				<Property Name="App_copyErrors" Type="Bool">true</Property>
+				<Property Name="App_INI_aliasGUID" Type="Str">{CA2E0CB0-A4CE-4958-9AC8-677E2635D929}</Property>
+				<Property Name="App_INI_GUID" Type="Str">{3759BC1E-8C3C-402E-A4B4-1F1D75775CD8}</Property>
+				<Property Name="App_serverConfig.httpPort" Type="Int">8002</Property>
+				<Property Name="App_serverType" Type="Int">0</Property>
+				<Property Name="Bld_autoIncrement" Type="Bool">true</Property>
+				<Property Name="Bld_buildCacheID" Type="Str">{20FAA98F-92F8-4C4A-BD63-90DD7978E4D2}</Property>
+				<Property Name="Bld_buildSpecName" Type="Str">test_etal</Property>
+				<Property Name="Bld_excludeInlineSubVIs" Type="Bool">true</Property>
+				<Property Name="Bld_excludeLibraryItems" Type="Bool">true</Property>
+				<Property Name="Bld_excludePolymorphicVIs" Type="Bool">true</Property>
+				<Property Name="Bld_localDestDir" Type="Path">/C/Users/yberton/Documents/Scripts/LabView_EBN/Etalonnage/executable</Property>
+				<Property Name="Bld_modifyLibraryFile" Type="Bool">true</Property>
+				<Property Name="Bld_previewCacheID" Type="Str">{0A6070C3-A7A1-49E0-B47B-4C54F297FBF6}</Property>
+				<Property Name="Bld_version.build" Type="Int">1</Property>
+				<Property Name="Bld_version.major" Type="Int">1</Property>
+				<Property Name="Destination[0].destName" Type="Str">etalonnage.exe</Property>
+				<Property Name="Destination[0].path" Type="Path">/C/Users/yberton/Documents/Scripts/LabView_EBN/Etalonnage/executable/etalonnage.exe</Property>
+				<Property Name="Destination[0].path.type" Type="Str">&lt;none&gt;</Property>
+				<Property Name="Destination[0].preserveHierarchy" Type="Bool">true</Property>
+				<Property Name="Destination[0].type" Type="Str">App</Property>
+				<Property Name="Destination[1].destName" Type="Str">Support Directory</Property>
+				<Property Name="Destination[1].path" Type="Path">/C/Users/yberton/Documents/Scripts/LabView_EBN/Etalonnage/executable/data</Property>
+				<Property Name="Destination[1].path.type" Type="Str">&lt;none&gt;</Property>
+				<Property Name="DestinationCount" Type="Int">2</Property>
+				<Property Name="Source[0].itemID" Type="Str">{DB581D9B-2E5E-415B-BC03-BF663651DF6F}</Property>
+				<Property Name="Source[0].type" Type="Str">Container</Property>
+				<Property Name="Source[1].destinationIndex" Type="Int">0</Property>
+				<Property Name="Source[1].itemID" Type="Ref">/Poste de travail/Program_EBN_Yann_Berton.vi</Property>
+				<Property Name="Source[1].sourceInclusion" Type="Str">TopLevel</Property>
+				<Property Name="Source[1].type" Type="Str">VI</Property>
+				<Property Name="SourceCount" Type="Int">2</Property>
+				<Property Name="TgtF_fileDescription" Type="Str">test_etal</Property>
+				<Property Name="TgtF_internalName" Type="Str">test_etal</Property>
+				<Property Name="TgtF_legalCopyright" Type="Str">Copyright © 2024 </Property>
+				<Property Name="TgtF_productName" Type="Str">test_etal</Property>
+				<Property Name="TgtF_targetfileGUID" Type="Str">{224267B8-1B77-4912-BA39-15C287CD3A5C}</Property>
+				<Property Name="TgtF_targetfileName" Type="Str">etalonnage.exe</Property>
 				<Property Name="TgtF_versionIndependent" Type="Bool">true</Property>
 			</Item>
 		</Item>
