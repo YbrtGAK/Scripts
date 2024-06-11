@@ -13,10 +13,9 @@ L_theo = [] # List of theoretical/true values
 L_exp = [] # List of experimental values 
 
 # Functions' declaration
-y = lambda x,a,b : a*x + b # Linear function declaration
+f = lambda x,a,b : a*x + b # Linear function declaration
 theta = lambda Trk,Tk : Tk - Trk 
-
-
+y1 = lambda 
 
 # Variables of interest
 Trk = 20 # [°C]
