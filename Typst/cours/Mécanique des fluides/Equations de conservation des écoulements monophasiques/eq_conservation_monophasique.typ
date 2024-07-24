@@ -1,6 +1,7 @@
 #import "@local/paper_course_template:1.0.0": *
 #import "@local/typst-boxes-main:1.0.0" : *
 #import "@local/math_lib:1.0.0" : *
+#import "@preview/tablex:0.0.8"
 
 #show: course.with(
   title: [Equations de conservation des écoulements monophasiques],

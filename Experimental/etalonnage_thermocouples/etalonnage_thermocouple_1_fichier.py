@@ -199,6 +199,7 @@ Lnew_coeff = lst_sqrs(LTmean, LT, La, Lb)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                Display graphs 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+%matplotlib qt5
 if disp_graph:
     textstr = []  #Initialization of the labels' list
     T_fit = []  #Initialization of the fitted temperature list
@@ -278,7 +279,6 @@ if disp_graph:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                 Laboratory
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-%matplotlib qt5
 ax = plt.subplot()
 
 ax.plot(df_mean.index, df_mean.index, '--k', linewidth=1,
@@ -291,3 +291,25 @@ ax.scatter(np.linspace(15,120,8), f_linreg,
                   color='b', label="Linear regression", s=12)
 ax.scatter(np.linspace(15,120,8), f_lstq,
                   color='r', label="Least squares", s=12)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                Laboratory2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+df_test = Ldfs[0][Ldfs[0].iloc[:,4] < 0.2]
+df_test.sort_values(ascending=True, axis=0,by=["T_PH_in (wall)"],inplace=True)
+df_test.reset_index(drop=True, inplace=True)
+for col in df_test :
+    df_test[col] -= 15
+
+fig, axs = plt.subplots(2,2)
+for x in range(0,4) :
+    a = int(x/2)
+    if (x % 2) == 0 : 
+        b = 0
+    else :
+        b = 1
+    axs[a][b].boxplot(df_test.iloc[:,x])
+    axs[a][b].set_title(df_test.columns[x])
+fig.suptitle("Dispersion des erreurs des thermocouples ")
+plt.show()
