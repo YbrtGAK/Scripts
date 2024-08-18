@@ -13,8 +13,8 @@ For a demonstration of a line plot on a polar axis, see @fig-polar. \
 #align(
     center,
     block(
-    fill : red,
     inset:2pt,
+    outset:2pt,
     [
 ```
 
