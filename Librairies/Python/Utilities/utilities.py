@@ -16,7 +16,7 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 import pickle
-from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
+from PyPDF2 import PdfReader, PdfWriter, PdfMerger
 from os import walk
 from pathlib import Path
 
@@ -104,7 +104,7 @@ def extractFromPdf():
     par l'utilisateur) d'un autre pdf"""
     
     path_original_pdf = getAFilesPath() #Chemin absolu vers le pdf source
-    original_pdf = PdfFileReader(str(path_original_pdf)) #Obtention fichier pdf
+    original_pdf = PdfReader(str(path_original_pdf)) #Obtention fichier pdf
     #number_pages = original_pdf.getNumPages() #Nombre maximal de pages du pdf source
     output_pdf_path = getAFilesPathToSave() #Chemin absolu vers le pdf à enregistrer
     list_pages_to_extract = input('Veuillez renseigner les pages que vous voulez extraire du document original dans un format similaire à l exemple suivant  : 1 2 5 3 \n')
@@ -112,7 +112,7 @@ def extractFromPdf():
     #Création d'une liste des pages désirées de type nombre entiers
     list_pages_to_extract = list_pages_to_extract.split(' ') 
     for i in range(0, len(list_pages_to_extract)) : list_pages_to_extract[i] = int(list_pages_to_extract[i])
-    pdf_writer = PdfFileWriter() #Création d'un fichier pdf de sortie
+    pdf_writer = PdfWriter() #Création d'un fichier pdf de sortie
     
     #Récupération des pages désirées du pdf source dans le pdf de sortie
     for page_num in list_pages_to_extract : pdf_writer.addPage(original_pdf.getPage(page_num))
@@ -127,9 +127,9 @@ def mergePdf():
     """Créer un pdf à partir de n pdf"""
     
     paths = getFilesPaths("Chemins vers les pdfs à fusionner")
-    merge_file = PdfFileMerger()
+    merge_file = PdfMerger()
     for path in paths:
-        merge_file.append(PdfFileReader(path, 'rb'))
+        merge_file.append(PdfReader(path, 'rb'))
     output_pdf_path = getAFilesPathToSave() #Chemin absolu vers le pdf à enregistrer
     merge_file.write(output_pdf_path)
     return()

@@ -257,3 +257,16 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = ReportApp()
     sys.exit(app.exec_())
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                Laboratory
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+file = open("rapport.txt", 'r')
+content = file.read()
+list1 = [e for e in content.split('\n') if e != '        ']
+del(list1[0])
+list2 = [e.split("        ")[-1] for e in list1
+
+
+

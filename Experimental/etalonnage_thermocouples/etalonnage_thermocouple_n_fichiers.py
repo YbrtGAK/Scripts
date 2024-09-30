@@ -73,7 +73,7 @@ LTmean = [] #Initialization of Tmean array
 
 for i in range(len(Ldf)): #Going through all the dataframes for each temperature test
     df = Ldf[i] # Get the dataframe
-    T = subDirNames[i] #Get the temperature value (serve no purpose in the code)
+    #T = subDirNames[i] #Get the temperature value (serve no purpose in the code)
     
     #Let's make sure that the steady state was reached
     df_std = df.rolling(4).std() #Get a standart deviation for each value according 4 of its previous ones

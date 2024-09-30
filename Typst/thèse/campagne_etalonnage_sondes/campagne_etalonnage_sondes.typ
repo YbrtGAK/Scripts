@@ -202,7 +202,7 @@ La mesure de la température $T_c$ à l'aide d'un thermocouple est indirecte. Le
 
 === Méthodologie d'étalonnage
 
-Soit $Y$ la mesurande, $y$ son estimation et $u(y)$ l'écart-type de la mesure.
+Soient $Y$ la mesurande, $y$ son estimation et $u(y)$ l'écart-type de la mesure.
 Les étapes de l'étalonnage des thermocouples sont listées ci-dessous : 
 
 0. Au choix une méthode de calcul d'incertitude :
