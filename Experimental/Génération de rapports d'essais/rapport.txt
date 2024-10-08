@@ -1,0 +1,21 @@
+
+        Titre: dqsfqf
+        Nom de l'auteur: sdfsdfsdf
+        Objectif du document: sdfsdfsdf
+        Logiciel d'acquisition: Software A
+        
+        Données pour l'évaporateur:
+        L: 1
+        Ra: 1
+        n°: 1
+        
+        Données du fluide:
+        Nature: Fluide 1
+        Etat: SF
+        
+        Grandeurs fixées: ['Variable B', 'Variable D']
+        
+        Images importées: C:/Users/yberton/Desktop/tour.png
+        
+        Remarque: jhdhqgdsq
+        
