@@ -63,7 +63,6 @@ match fmt :
     case _ :
         print("Format unrecognized, please check your file :/")
         
-%matplotlib qt5
 df.plot()
 
 df_std = df.std()
