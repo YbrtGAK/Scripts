@@ -21,6 +21,9 @@ class ReportApp(QWidget):
         # Main layout
         mainLayout = QVBoxLayout()
 
+        # Select width
+        self.setFixedWidth(550)
+
         # Create tab widget
         self.tabs = QTabWidget()
         
@@ -41,7 +44,7 @@ class ReportApp(QWidget):
         self.nextTabButton = QPushButton("Passer au formulaire")
         self.nextTabButton.clicked.connect(self.goToFormTab)
         
-        # Add a spacer to push the button to the bottom
+        # 1st tab - Add a spacer to push the button to the bottom
         self.tab1Layout.addStretch(1)
         self.tab1Layout.addWidget(self.nextTabButton)
         
@@ -51,33 +54,33 @@ class ReportApp(QWidget):
         self.tab2 = QWidget()
         self.tab2Layout = QVBoxLayout()
 
-        # Title
+        # Second tab - Title
         titleLabel = QLabel("Titre:")
         self.titleEdit = QLineEdit()
         self.tab2Layout.addWidget(titleLabel)
         self.tab2Layout.addWidget(self.titleEdit)
 
-        # Author
+        # Second tab - Author
         authorLabel = QLabel("Nom de l'auteur:")
         self.authorEdit = QLineEdit()
         self.authorEdit.setMaximumWidth(200)  # Adjust width as needed
         self.tab2Layout.addWidget(authorLabel)
         self.tab2Layout.addWidget(self.authorEdit)
 
-        # Objective
+        # Second tab - Objective
         objectiveLabel = QLabel("Objectif du document:")
         self.objectiveEdit = QTextEdit()
         self.tab2Layout.addWidget(objectiveLabel)
         self.tab2Layout.addWidget(self.objectiveEdit)
 
-        # Acquisition software
+        # Second tab - Acquisition software
         softwareLabel = QLabel("Logiciel d'acquisition:")
         self.softwareComboBox = QComboBox()
         self.softwareComboBox.addItems(["Software A", "Software B", "Software C"])
         self.tab2Layout.addWidget(softwareLabel)
         self.tab2Layout.addWidget(self.softwareComboBox)
 
-        # Titles layout
+        # Second tab - Titles layout
         titlesLayout = QHBoxLayout()
 
         evapTitleLayout = QHBoxLayout()
@@ -87,6 +90,13 @@ class ReportApp(QWidget):
         evapTitleLayout.addWidget(evapLabel)
         evapTitleLayout.addStretch()
 
+        preheaterTitleLayout = QHBoxLayout()
+        preheaterLabel = QLabel("Données du pré-chauffeur:")
+        preheaterLabel.setAlignment(Qt.AlignCenter)
+        preheaterTitleLayout.addStretch()
+        preheaterTitleLayout.addWidget(preheaterLabel)
+        preheaterTitleLayout.addStretch()
+
         fluidTitleLayout = QHBoxLayout()
         fluidLabel = QLabel("Données du fluide:")
         fluidLabel.setAlignment(Qt.AlignCenter)
@@ -95,11 +105,12 @@ class ReportApp(QWidget):
         fluidTitleLayout.addStretch()
 
         titlesLayout.addLayout(evapTitleLayout)
+        titlesLayout.addLayout(preheaterTitleLayout)
         titlesLayout.addLayout(fluidTitleLayout)
 
         self.tab2Layout.addLayout(titlesLayout)
 
-        # Evaporator data
+        # Second tab - Evaporator data
         evapFormLayout = QFormLayout()
         self.LEdit = QLineEdit()
         self.LEdit.setMaximumWidth(100)
@@ -113,7 +124,21 @@ class ReportApp(QWidget):
         self.numEdit.setMaximumWidth(100)
         evapFormLayout.addRow("n°:", self.numEdit)
 
-        # Fluid data
+        self.qEdit = QLineEdit()
+        self.qEdit.setMaximumWidth(100)
+        evapFormLayout.addRow("q̇:", self.qEdit)
+
+        # Second tab - Preheater data
+        preheaterFormLayout = QFormLayout()
+        self.preL = QLineEdit()
+        self.preL.setMaximumWidth(100)
+        preheaterFormLayout.addRow("L:", self.preL)
+
+        self.preQ = QLineEdit()
+        self.preQ.setMaximumWidth(100)
+        preheaterFormLayout.addRow('q̇:', self.preQ)
+
+        # Second tab - Fluid data
         fluidFormLayout = QFormLayout()
         self.natureComboBox = QComboBox()
         self.natureComboBox.setMaximumWidth(100)
@@ -124,14 +149,19 @@ class ReportApp(QWidget):
         self.stateEdit.setMaximumWidth(100)
         fluidFormLayout.addRow("Etat:", self.stateEdit)
 
-        # Combine both layouts horizontally
+        self.mEdit = QLineEdit()
+        self.mEdit.setMaximumWidth(100)
+        fluidFormLayout.addRow("ṁ:", self.mEdit)
+
+        # Second tab - Combine all three layouts horizontally
         dataLayout = QHBoxLayout()
         dataLayout.addLayout(evapFormLayout)
+        dataLayout.addLayout(preheaterFormLayout)
         dataLayout.addLayout(fluidFormLayout)
 
         self.tab2Layout.addLayout(dataLayout)
 
-        # Fixed variables
+        # Second tab - Fixed variables
         fixedLabel = QLabel("Grandeurs fixées:")
         self.fixedListWidget = QListWidget()
         self.fixedListWidget.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -139,12 +169,12 @@ class ReportApp(QWidget):
         self.fixedListWidget.setMaximumWidth(150)  # Adjust width as needed
         self.fixedListWidget.itemSelectionChanged.connect(self.updateSelectedFixedVariables)
 
-        # Selected fixed variables display
+        # Second tab - Selected fixed variables display
         self.selectedFixedLabel = QLabel("Grandeurs sélectionnées:")
         self.selectedFixedListWidget = QListWidget()
         self.selectedFixedListWidget.setMaximumWidth(150)  # Adjust width as needed
 
-        # Layout for fixed variables and selected display
+        # Second tab - Layout for fixed variables and selected display
         fixedLayout = QVBoxLayout()
         fixedLayout.addWidget(fixedLabel)
         fixedLayout.addWidget(self.fixedListWidget)
@@ -153,14 +183,14 @@ class ReportApp(QWidget):
         selectedFixedLayout.addWidget(self.selectedFixedLabel)
         selectedFixedLayout.addWidget(self.selectedFixedListWidget)
 
-        # Combine both layouts horizontally
+        # Second tab - Combine both layouts horizontally
         fixedVariablesLayout = QHBoxLayout()
         fixedVariablesLayout.addLayout(fixedLayout)
         fixedVariablesLayout.addLayout(selectedFixedLayout)
 
         self.tab2Layout.addLayout(fixedVariablesLayout)
 
-        # Image upload
+        # Second tab - Image upload
         imageLabel = QLabel("Importer des fichiers images:")
         self.imageButton = QPushButton("Importer des images")
         self.imageButton.clicked.connect(self.importImages)
@@ -169,13 +199,13 @@ class ReportApp(QWidget):
         self.tab2Layout.addWidget(self.imageButton)
         self.tab2Layout.addWidget(self.imageLabel)
 
-        # Remark
+        # Second tab - Remark
         remarkLabel = QLabel("Remarque:")
         self.remarkEdit = QTextEdit()
         self.tab2Layout.addWidget(remarkLabel)
         self.tab2Layout.addWidget(self.remarkEdit)
 
-        # Submit Button
+        # Second tab - Submit Button
         submitButton = QPushButton("Générer le rapport")
         submitButton.clicked.connect(self.generateReport)
         self.tab2Layout.addWidget(submitButton)
@@ -197,6 +227,13 @@ class ReportApp(QWidget):
         if files:
             self.csvFileLabel.setText("\n".join(files))
 
+    def saveCSV(self):
+        options = QFileDialog.Options()
+        files, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", "", "txt Files (*.txt);;All Files (*)", options=options)
+        if files:
+            return(files)
+            #self.csvFileLabel.setText("\n".join(files))
+
     def goToFormTab(self):
         self.tabs.setCurrentIndex(1)
 
@@ -211,7 +248,7 @@ class ReportApp(QWidget):
         selectedItems = self.fixedListWidget.selectedItems()
         for item in selectedItems:
             self.selectedFixedListWidget.addItem(item.text())
-            
+
     def generateReport(self):
         title = self.titleEdit.text()
         author = self.authorEdit.text()
@@ -220,8 +257,12 @@ class ReportApp(QWidget):
         L = self.LEdit.text()
         Ra = self.RaEdit.text()
         num = self.numEdit.text()
+        q = self.qEdit.text()
+        preL = self.preL.text()
+        preQ = self.preQ.text()
         nature = self.natureComboBox.currentText()
         state = self.stateEdit.text()
+        m = self.mEdit.text()
         fixed = [item.text() for item in self.fixedListWidget.selectedItems()]
         images = self.imageLabel.text().split("\n")
         remark = self.remarkEdit.toPlainText()
@@ -231,24 +272,33 @@ class ReportApp(QWidget):
         Nom de l'auteur: {author}
         Objectif du document: {objective}
         Logiciel d'acquisition: {software}
-        
+
         Données pour l'évaporateur:
         L: {L}
         Ra: {Ra}
         n°: {num}
-        
+        q: {q}
+
+        Données du pré-chauffeur:
+        L: {preL}
+        q: {preQ}
+
         Données du fluide:
         Nature: {nature}
         Etat: {state}
-        
+        m: {m}
+
         Grandeurs fixées: {fixed}
-        
-        Images importées: {", ".join(images)}
-        
+
+        Images: {",".join(images)}
+
         Remarque: {remark}
         """
         
-        with open("rapport.txt", "w") as file:
+        self.path = self.saveCSV()
+        print(self.path)
+
+        with open(self.path, "w", encoding = 'utf8') as file:
             file.write(report)
         
         print("Rapport généré avec succès!")
