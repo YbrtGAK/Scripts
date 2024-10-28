@@ -30,10 +30,6 @@ df = pd.read_excel(path)
 biblio = load_workbook(path, read_only=False, keep_vba=True)
 feuil1 = biblio['Feuil1'] #In particular we load the first sheet
 
-
-#A check u m8 want to keeep
-#B = [True for item in items if item['title'] in df['Name']]
-
 def update(items,df):
     
     # Empty list to collect dataframes

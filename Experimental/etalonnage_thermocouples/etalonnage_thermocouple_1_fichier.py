@@ -22,28 +22,12 @@ from scipy import stats
 from sklearn.metrics import mean_squared_error
 from scipy.optimize import least_squares
 
-
 # Flags
 # Choose to display graphs
 save_graph = True # Save the graph
+save_excel = False #Save the fitting laws in an excel file
 
-one_file_per_temp = False
-# If true, you need to have the following architecture :
-"""
-main folder
-        - Tcons_1
-            - Tcons_1a.lvm
-            - Tcons_1b.lvm
-            - [...]
-        - Tcons_2
-            - [...]
-        - Tcons_3
-            - [...]
-        - [...]
-"""
-# If false, just point to your csv file (or lvm, or txt)
-
-#Visual check whether the right channels match the right sensors
+#Visual check to see if the thermocouples work properly
 def check_sensor_channel_matching(df):
     df_std = df.std()
     return(df_std[df_std > 1])
@@ -62,7 +46,12 @@ match fmt :
         df = lvm_to_df(path)
     case _ :
         print("Format unrecognized, please check your file :/")
-        
+     
+try :
+    %matplotlib qt5
+except Error : 
+    None
+    
 df.plot()
 
 df_std = df.std()
@@ -90,7 +79,7 @@ df_filtered.plot()
 
 # Get the temperature used for the calibration from user
 # Temperatures used for the calibration
-LT = [-5 + i*15 for i in range(0,8)]
+LT = [15 + i*15 for i in range(0,8)]
 
 # We find in between temp in order to split the dataframe in several ones for a giver reference temmperature
 LT_to_sort = [(LT[i] + LT[i+1])/2 for i in range(0, 7)]
@@ -111,11 +100,14 @@ Ldfs.append(df_to_sort)
 Ldf_treated = []  # Initialization of treated list of dataframes
 LTmean = []  # Initialization of Tmean array
 
+std_lim = 0.01
+std_buff = std_lim
+Lstd= []
 for i in range(len(Ldfs)):  # Going through all the dataframes for each temperature test
     df = Ldfs[i]  # Get the dataframe
 
     # Let's make sure that the steady state was reached
-    # Get a standart deviation for each value according 4 of its previous ones
+    # Get a standart deviation for a period set by the user through t_step
     df_std = df.rolling(round(t_step/dt)).std()
     cols = [col for col in df_std.columns]  # get columns' names in a array
     # Create new cols names
@@ -125,10 +117,16 @@ for i in range(len(Ldfs)):  # Going through all the dataframes for each temperat
     for i in range(0, len(new_cols)):
         df[new_cols[i]] = df_std[cols[i]]
 
-    # Delete the lines where std < 0.1 (why ? fixd after evaluation)
+    # Delete the lines where std < std_lim
     for i in range(int(len(df.columns)/2), int(len(df.columns))):
-        df = df[df.iloc[:, i] < 0.05]
-
+        std_buff = std_lim
+        df_buff = df[df.iloc[:, i] < std_lim]
+        while len(df_buff) <= 10:
+            std_buff += 0.01
+            df_buff = df[df.iloc[:, i] < std_buff] 
+        df = df_buff.copy()
+        Lstd.append(std_buff)
+            
     Tmean = []
     # Get the average value
     for i in range(0, int(len(df.columns)/2)):
@@ -158,7 +156,6 @@ df_mean.sort_index(axis=0, ascending=True, inplace=True)
 def f_lin(x, a, b): return a*x + b
 
 # Least squared method
-
 def lst_sqrs(LTmean, LT):
     Lnew_coeff = []
     ytheo = np.array(LT)
@@ -172,24 +169,27 @@ def lst_sqrs(LTmean, LT):
 
 Lnew_coeff = lst_sqrs(LTmean, LT)
 
+#Root mean square error 
+T_fit = []  #Initialization of the fitted temperature list
+
+T_abs_fit = np.linspace(df_mean.index[0], df_mean.index[-1], 100) # Abscissa for calibration's evaluation
+L_RMSE = [] #Initialization of the Root Mean Squared Error  list
+for i in range(len(Lnew_coeff)) : 
+    T_fit.append(f_lin(df_mean.index, Lnew_coeff[i][0], Lnew_coeff[i][1])) # Get the predicted temperature
+    L_RMSE.append(mean_squared_error(df_mean.index,T_fit[-1], squared=False)) #
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                Display graphs 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 #%matplotlib qt5
 
 textstr = []  #Initialization of the labels' list
-T_fit = []  #Initialization of the fitted temperature list
-L_RMSE = [] #Initialization of the Root Mean Squared Error list
 
-#Horizontal axis to plot the fitted function's curve
-T_abs_fit = np.linspace(df_mean.index[0], df_mean.index[-1], 100)
 
 # For each thermocouple, get the fitted values from the evaluation of T_abs_fit
 for i in range(len(Lnew_coeff)):
     
-    # Evaluation
-    T_fit.append(f_lin(T_abs_fit, Lnew_coeff[i][0], Lnew_coeff[i][1]))
-    L_RMSE.append(mean_squared_error(T_abs_fit,T_fit[-1], squared=False))
     if Lnew_coeff[i][1] <= 0:  # Cases for esthetic display purposes
         textstr.append('\n'.join((r'$T_{pred}$ = %.5f.$T_{mes}$ - %.5f ' % (Lnew_coeff[i][0], abs(Lnew_coeff[i][1])),  # Regression label creation
                                   'RMSE = %.3e [°C]' % (L_RMSE[i]))))
@@ -222,7 +222,7 @@ for i in range(len(Lnew_coeff)):
         irow = i - int(i/2) - 1
     axs[irow][icol].scatter(df_mean.index, df_mean.iloc[:, i],
                       color=Lcolor[i], label= r'$T_{mes}$ (' +df_mean.columns[i] + ')')
-    axs[irow][icol].plot(T_abs_fit, T_fit[i], color=Lcolor[i], label=r'$T_{corrected}$')
+    axs[irow][icol].plot(df_mean.index, T_fit[i], color=Lcolor[i], label=r'$T_{corrected}$')
     axs[irow][icol].text(0.55, 0.1, textstr[i], transform=axs[irow][icol].transAxes, fontsize=10,
                    verticalalignment='baseline', bbox=props)
 # Action to do for all subplots/thermocouple analysis
@@ -238,9 +238,11 @@ for ax in axs:
 if save_graph : 
     fig1.savefig(getAFilesPathToSave())
 
-La = [coeff[0] for coeff in Lnew_coeff]
-Lb = [coeff[1] for coeff in Lnew_coeff]
+if save_excel :
+    La = [coeff[0] for coeff in Lnew_coeff]
+    Lb = [coeff[1] for coeff in Lnew_coeff]
+    
+    data = {'a' : La, 'b' : Lb, 'RMSE [°C]' : L_RMSE}
+    df_fit = pd.DataFrame.from_dict(data, orient="index",columns=df_mean.columns).T
+    df_fit.to_csv(getAFilesPathToSave(), sep=';', header=True)
 
-data = {'a' : La, 'b' : Lb, 'RMSE [°C]' : L_RMSE}
-df_fit = pd.DataFrame.from_dict(data, orient="index",columns=df_mean.columns).T
-df_fit.to_csv(getAFilesPathToSave(), sep=';', header=True)

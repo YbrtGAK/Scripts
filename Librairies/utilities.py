@@ -87,9 +87,10 @@ def files_name_to_list(path):
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-                       Gestion des fichiers de mesures
+                       Gestion des fichiers de données
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-#Convertir en dataframe des fichiers de mesures, tracer des courbes, [...]
+#Convertir en dataframe des fichiers de mesures, tracer des courbes, modifier
+#des fichiers de données type excel, [...]
 
 """""""""""""""""""""""""""""""""Fichiers lvm"""""""""""""""""""""""""""""""""
 
@@ -175,6 +176,12 @@ def read_pickle(input_file):
     dictload = pickle.load(open(input_file, 'rb'))
     return dictload
 
+
+"""""""""""""""""""""""""""""""Fichiers Excel"""""""""""""""""""""""""""""""""
+
+from openpyxl import load_workbook
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                             Gestion des Pdfs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -217,7 +224,7 @@ def mergePdf():
     return()
     
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-                            Gestion des Pdfs
+                                    Widgets
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 # Widgets classes to go faster
 
