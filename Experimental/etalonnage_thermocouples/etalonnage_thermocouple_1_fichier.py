@@ -25,7 +25,7 @@ from scipy.optimize import least_squares
 # Flags
 # Choose to display graphs
 save_graph = True # Save the graph
-save_excel = False #Save the fitting laws in an excel file
+save_excel = True #Save the fitting laws in an excel file
 
 #Visual check to see if the thermocouples work properly
 def check_sensor_channel_matching(df):
@@ -211,7 +211,7 @@ fig1, axs = plt.subplots(
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
 # Color list
-Lcolor = ['b','r','g','purple','orange','pink', 'brown', 'yellow', 'blue']
+Lcolor = ['b','r','g','purple','orange','pink', 'brown', 'yellow', 'blue', 'grey', 'cyan', 'salmon', 'forestgreen']
 
 for i in range(len(Lnew_coeff)):
     if i%2 == 0 :
