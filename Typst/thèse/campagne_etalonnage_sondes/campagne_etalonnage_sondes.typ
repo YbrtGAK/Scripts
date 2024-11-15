@@ -98,17 +98,26 @@ Ce document a plusieurs objectifs :
   bottom: if y == 0 {2pt} else {1pt}
 ))
 
-//Mise en forme de surlignage bleu pour les capteurs de la section test
 
-//Instanciation d'un objet état --> permet d'évaluer le contenu d'une cellule
-#let current-col = state("current-col", "")
+// Instanciation d'un état pour marquer si la ligne doit être colorée
+#let should-color = state("should-color", false)
 
-//Régle évaluée en une celulle : si celle-ci commence par la lettre T, alors toute les cellules de sa ligne sont surlignées en bleu
+// Vérifie si la cellule de la seconde colonne commence par "T"
+#show table.cell.where(fill: none, x: 1): it => {
+  if it.body.text.first() == "l" {
+    should-color.update(true)
+  } else {
+    should-color.update(false)
+  }
+  it
+}
+
+// Applique le remplissage bleu à chaque cellule de la ligne si la condition est remplie
 #show table.cell.where(fill: none): it => context {
-  if current-col.at(here()).clusters().first() == "T" {
+  if should-color.at(here()) {
     box(
       fill: blue.lighten(85%),
-      stroke : (top:0.4pt, bottom:0.4pt),
+      stroke: (top: 0.4pt, bottom: 0.4pt),
       width: 102%,
       height: auto,
       outset: -0pt,
@@ -118,20 +127,15 @@ Ce document a plusieurs objectifs :
     it
   }
 }
-//Applique la règle précédente sur les cellule de la première colonne uniquement
-#show table.cell.where(fill: none, x: 0): it => {
-  current-col.update(it.body.text)
-  it
-}
 
 #figure(
   table(
   columns:(auto,2.4cm,4cm,4cm,auto,auto),
   align: horizon+center,
-  [Indice], [Canal #footnote[Fait références aux canaux du Keithley]],  [Référence], [Localisation], [Immergé],[Calibré],
-  [A1], [202],[K405 (Prosensor®)],[Preheater inlet], [☒],[☒],
+  [Indice], [Canal],  [Référence], [Localisation], [Immergé],[Calibré],
+  [A1], [lol],[K405 (Prosensor®)],[Preheater inlet], [☒],[☒],
   [A2], [234], [Homemade (Omega®)], [Preheater inlet],[☐],[☒],
-  [T1],[219],[Homemade (Omega®)],[Preheater surface 1],[☐],[☐],
+  [T1],[lol],[Homemade (Omega®)],[Preheater surface 1],[☐],[☐],
   [T2],[208],[Homemade (Omega®)],[Preheater surface 2],[☐],[☐],
   [T3],[220],[Homemade (Omega®)],[Preheater surface 3],[☐],[☐],
   [T4],[218],[Homemade (Omega®)],[Preheater surface 4],[☐],[☐],

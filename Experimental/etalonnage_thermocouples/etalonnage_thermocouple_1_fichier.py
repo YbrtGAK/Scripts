@@ -213,27 +213,50 @@ props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 # Color list
 Lcolor = ['b','r','g','purple','orange','pink', 'brown', 'yellow', 'blue', 'grey', 'cyan', 'salmon', 'forestgreen']
 
-for i in range(len(Lnew_coeff)):
-    if i%2 == 0 :
-        irow = int(i/2)
-        icol = 0
-    else :
-        icol = 1
-        irow = i - int(i/2) - 1
-    axs[irow][icol].scatter(df_mean.index, df_mean.iloc[:, i],
-                      color=Lcolor[i], label= r'$T_{mes}$ (' +df_mean.columns[i] + ')')
-    axs[irow][icol].plot(df_mean.index, T_fit[i], color=Lcolor[i], label=r'$T_{corrected}$')
-    axs[irow][icol].text(0.55, 0.1, textstr[i], transform=axs[irow][icol].transAxes, fontsize=10,
+if len(Lnew_coeff) == 2 : 
+    
+    axs[0].scatter(df_mean.index, df_mean.iloc[:, 0],
+                      color=Lcolor[0], label= r'$T_{mes}$ (' +df_mean.columns[0] + ')')
+    axs[0].plot(df_mean.index, T_fit[0], color=Lcolor[0], label=r'$T_{corrected}$')
+    axs[0].text(0.55, 0.1, textstr[0], transform=axs[0].transAxes, fontsize=10,
                    verticalalignment='baseline', bbox=props)
-# Action to do for all subplots/thermocouple analysis
-for ax in axs:
-    for a in ax:
+    axs[1].scatter(df_mean.index, df_mean.iloc[:, 1],
+                      color=Lcolor[1], label= r'$T_{mes}$ (' +df_mean.columns[1] + ')')
+    axs[1].plot(df_mean.index, T_fit[1], color=Lcolor[1], label=r'$T_{corrected}$')
+    axs[1].text(1.55, 1.1, textstr[1], transform=axs[1].transAxes, fontsize=10,
+                   verticalalignment='baseline', bbox=props)
+    
+    for a in axs:
         a.set_xlabel('Targeted temperature [°C]')  # Set x label
         a.set_ylabel('Measured temperature [°C]')  # Set y label
         a.plot(df_mean.index, df_mean.index, '--k', linewidth=2,
                label=r'$id_E$')  # Display identity function's curve
         a.legend()  # Display legend
         a.grid()  # Display a grid
+    
+else : 
+    for i in range(len(Lnew_coeff)):
+        if i%2 == 0 :
+            irow = int(i/2)
+            icol = 0
+        else :
+            icol = 1
+            irow = i - int(i/2) - 1
+    
+        axs[irow][icol].scatter(df_mean.index, df_mean.iloc[:, i],
+                          color=Lcolor[i], label= r'$T_{mes}$ (' +df_mean.columns[i] + ')')
+        axs[irow][icol].plot(df_mean.index, T_fit[i], color=Lcolor[i], label=r'$T_{corrected}$')
+        axs[irow][icol].text(0.55, 0.1, textstr[i], transform=axs[irow][icol].transAxes, fontsize=10,
+                       verticalalignment='baseline', bbox=props)
+    # Action to do for all subplots/thermocouple analysis
+    for ax in axs:
+        for a in ax:
+            a.set_xlabel('Targeted temperature [°C]')  # Set x label
+            a.set_ylabel('Measured temperature [°C]')  # Set y label
+            a.plot(df_mean.index, df_mean.index, '--k', linewidth=2,
+                   label=r'$id_E$')  # Display identity function's curve
+            a.legend()  # Display legend
+            a.grid()  # Display a grid
 
 if save_graph : 
     fig1.savefig(getAFilesPathToSave())
