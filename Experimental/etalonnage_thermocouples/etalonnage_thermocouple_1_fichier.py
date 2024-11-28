@@ -13,8 +13,10 @@ import matplotlib.pyplot as plt  # Library for graphs
 import os
 import tkinter as tk  # Note : no mandotory, if you don't want to install tk package
 from tkinter import filedialog  # give the paths manually
-from utilities import getAFilesPath, getADirsPath, lvm_to_df, \
-    h5py_to_dataframe, getElementFromWidgetList,getAFilesPathToSave
+from utilities.path import getAFilesPath, getADirsPath, getAFilesPathToSave
+from utilities.data.lvm import  lvm_to_df
+from utilities.data. h5 import h5py_to_dataframe 
+from utilities.widgets import getElementFromWidgetList
 
 import numpy as np  # Library for vectorial objects
 # Library for machine learning tools
@@ -47,10 +49,8 @@ match fmt :
     case _ :
         print("Format unrecognized, please check your file :/")
      
-try :
-    %matplotlib qt5
-except Error : 
-    None
+%matplotlib qt5
+df = df[df.index <= "11-23-2024"]
     
 df.plot()
 
