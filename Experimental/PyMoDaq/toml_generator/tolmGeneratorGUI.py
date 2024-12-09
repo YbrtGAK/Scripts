@@ -7,7 +7,7 @@ import sys
 #Imports
 from keithleyDataClass import Keithley2700
 from PyQt5.QtWidgets import QFileDialog
-from utilities import getAFilesPath, getAFilesPathToSave
+from path import getAFilesPath, getAFilesPathToSave
 
 class KeithleyDialog(QDialog):
     """Fenêtre de dialogue pour entrer les paramètres Keithley"""
