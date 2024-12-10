@@ -18,9 +18,9 @@ import pandas as pd
 
 def lvm_to_df(lvm_file_path, skiprows=22):
     
-    """Converti un fichier lvm en dataframe"""
+    """Convertit un fichier lvm en dataframe"""
     #Note : La longueur de l'en-tête, fixée à 22, est un paramètre modifiable
     
     return(pd.read_csv(lvm_file_path, sep='\t', on_bad_lines='skip',
-                     skiprows=skiprows, decimal=','))
+                     skiprows=skiprows, decimal=',', encoding='unicode_escape'))
 

@@ -6,23 +6,24 @@ Created on Thu Nov  7 11:14:17 2024
 """
 
 #Imports (librairies)
-from utilities.dataManagement.h5 import h5py_to_dataframe
-from utilities.pathManagement import getAFilesPath
+from utilities.data.h5 import h5py_to_dataframe
+from utilities.data.lvm import lvm_to_df
+from utilities.path import getAFilesPath
 import pandas as pd
 import numpy as np
 
 #Acquisition de données
 df_V = h5py_to_dataframe(getAFilesPath(),'Scan000','Detector000','NavAxes','Data0D',['CH00'])[0]
+#Tableau des fonctions de passage courant - tension
+fconv = lambda I,a,b : (I*a*1000 + b)/1000
+fconv_dp = lambda I, a, b : (I*a*1000 + b)/10e5
+
 
 #Traitement des données par les lois d'étalonnage
 
 # Passage des données de tension (V) à courant (A)
 R = 50# Résitance électrique du pdt
 df_A = df_V/R # Passage tension - courant
-
-#Tableau des fonctions de passage courant - tension
-fconv = lambda I,a,b : (I*a*1000 + b)/1000
-fconv_dp = lambda I, a, b : (I*a*1000 + b)/10e5
 
 dictionnaire_pressions = {
 #   "102" :  fconv(df_A['102'], 1873.651651, -7494.33857),
@@ -35,10 +36,9 @@ dictionnaire_pressions = {
     #le sont en hPa, fconv_dp permet de passer ses coefficient a et b en hPa
     "115" :  fconv(df_A['115'], 2185.320017, -8709.65057),
     "118" :  fconv(df_A['118'], 1873.651651, -7494.33857),
-    "120" :  fconv(df_A['120'], 2191.646244, -8825.04373)
+    "120" :  fconv(df_A['120'], 1873.651651, -7494.33857)
 
     }
-
 
 %matplotlib qt
 
