@@ -216,7 +216,7 @@ Les étapes de l'étalonnage des thermocouples sont listées ci-dessous :
   u(mean(y)) = s(mean(y)) = sqrt((1)/(n.(n-1)).sum_(i=1)^(n)(y_i - mean(y))^2) = s(y)/sqrt(n)
   $] <incertitude_type_A>
 
-  Cette incertitude peut être étendue pour obtenir un intervalle d'incertitude (à 95% par exemple). Notamment, la loi Student peut être utilisée (Se réféfer à la méthode GUM). Elle est utilisée lorsque les mesures sont directes et nombreuses (Environ $n > 30$ #footnote(text(fill:red,[Citer les travaux de JLBK]))).
+  Cette incertitude peut être étendue pour obtenir un intervalle d'incertitude (à 95% par exemple). Notamment, la loi Student peut être utilisée (Se référer à la méthode GUM). Elle est utilisée lorsque les mesures sont directes et nombreuses (Environ $n > 30$ #footnote(text(fill:red,[Citer les travaux de JLBK]))).
 
 2. Calcul de l'incertitude de type B :
 

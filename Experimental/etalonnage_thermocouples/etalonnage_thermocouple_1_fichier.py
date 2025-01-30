@@ -50,8 +50,7 @@ match fmt :
         print("Format unrecognized, please check your file :/")
      
 %matplotlib qt5
-df = df[df.index <= "11-23-2024"]
-    
+df = df.filter(["226 -  PH1 [°C]", "227 - PH2 [°C]", "228 - PH3 [°C]", "229 - PH4 [°C]"])
 df.plot()
 
 df_std = df.std()
