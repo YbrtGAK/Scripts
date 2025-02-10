@@ -16,7 +16,7 @@ from tkinter import filedialog  # give the paths manually
 from utilities.path import getAFilesPath, getADirsPath, getAFilesPathToSave
 from utilities.data.lvm import  lvm_to_df
 from utilities.data. h5 import h5py_to_dataframe 
-from utilities.widgets import getElementFromWidgetList
+from utilities.widgets import Checkbox_list
 
 import numpy as np  # Library for vectorial objects
 # Library for machine learning tools
@@ -38,7 +38,7 @@ def check_sensor_channel_matching(df):
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                          Get the data in DataFrames
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-path = getAFilesPath()
+path = getAFilesPath("Chemin vers le fichier de données")
 fmt = path.split('/')[-1].split('.')[-1]
 
 match fmt :
@@ -50,12 +50,11 @@ match fmt :
         print("Format unrecognized, please check your file :/")
      
 %matplotlib qt5
-df = df.filter(["226 -  PH1 [°C]", "227 - PH2 [°C]", "228 - PH3 [°C]", "229 - PH4 [°C]"])
-df.plot()
 
+df.plot()
 df_std = df.std()
 df_raw = df_filtered = df.copy()  # We save the raw value in a unbinded dataframe
-df_filtered = df.filter(getElementFromWidgetList("Keithley Channels", list(df_filtered.columns.values)))
+df_filtered = df_filtered.filter(['210 - E_2_mid [°C]'])
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                             Measures treatments
@@ -74,11 +73,11 @@ t_step = 40 # Time step for steady state conditions in the rolling(std) method o
 # Cut the experimental data corresponding to the end of the calibration
 
 df_filtered.plot()
-#df_filtered = df_filtered[df_filtered.index < 2250]
+df_filtered = df_filtered[df_filtered.index < '2025-02-03 20:00:00']
 
 # Get the temperature used for the calibration from user
 # Temperatures used for the calibration
-LT = [15 + i*15 for i in range(0,8)]
+LT = [10 + i*15 for i in range(0,8)]
 
 # We find in between temp in order to split the dataframe in several ones for a giver reference temmperature
 LT_to_sort = [(LT[i] + LT[i+1])/2 for i in range(0, 7)]
@@ -201,18 +200,35 @@ phi = (1+5**0.5)/2  # Golden number to size graphs
 Tmax = df_mean.index[-1]  # For graph scaling purposes, get T max
 
 # 3 Subplots graph initialization
-if len(Lnew_coeff) % 2 == 0 : nrow = int(len(Lnew_coeff)/2)
-else : nrow = int(len(Lnew_coeff)/2) + 1
-fig1, axs = plt.subplots(
-    nrow, 2,constrained_layout=True, figsize=(12,12*phi))
-
 # State box proprieties to display the fitting function expression
-props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-
 # Color list
 Lcolor = ['b','r','g','purple','orange','pink', 'brown', 'yellow', 'blue', 'grey', 'cyan', 'salmon', 'forestgreen']
+props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+if len(Lnew_coeff) % 2 == 0 : nrow = int(len(Lnew_coeff)/2)
+else : nrow = int(len(Lnew_coeff)/2) + 1
+if len(Lnew_coeff) == 1:
+    fig1, axs = plt.subplots(
+        nrow, 1,constrained_layout=True, figsize=(12,12*phi))
 
-if len(Lnew_coeff) == 2 : 
+if len(Lnew_coeff) == 1 :
+    fig1, axs = plt.subplots(
+        nrow, 1,constrained_layout=True, figsize=(12,12*phi))
+    
+    axs.scatter(df_mean.index, df_mean.iloc[:, 0],
+                      color=Lcolor[0], label= r'$T_{mes}$ (' +df_mean.columns[0] + ')')
+    axs.plot(df_mean.index, T_fit[0], color=Lcolor[0], label=r'$T_{corrected}$')
+    axs.text(0.55, 0.1, textstr[0], transform=axs.transAxes, fontsize=10,
+                   verticalalignment='baseline', bbox=props)
+    axs.set_xlabel('Targeted temperature [°C]')  # Set x label
+    axs.set_ylabel('Measured temperature [°C]')  # Set y label
+    axs.plot(df_mean.index, df_mean.index, '--k', linewidth=2,
+           label=r'$id_E$')  # Display identity function's curve
+    axs.legend()  # Display legend
+    axs.grid()  # Display a grid
+
+elif len(Lnew_coeff) == 2 : 
+    fig1, axs = plt.subplots(
+        nrow, 2,constrained_layout=True, figsize=(12,12*phi))
     
     axs[0].scatter(df_mean.index, df_mean.iloc[:, 0],
                       color=Lcolor[0], label= r'$T_{mes}$ (' +df_mean.columns[0] + ')')
@@ -234,6 +250,8 @@ if len(Lnew_coeff) == 2 :
         a.grid()  # Display a grid
     
 else : 
+    fig1, axs = plt.subplots(
+        nrow, 2,constrained_layout=True, figsize=(12,12*phi))
     for i in range(len(Lnew_coeff)):
         if i%2 == 0 :
             irow = int(i/2)
